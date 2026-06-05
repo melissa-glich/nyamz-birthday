@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Nyamz!</title>
+    <style>
+        /* CSS RESET & THEME VARIABLES (PURPLE & BLACK) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #b366ff;        /* Radiant Neon Amethyst */
+            --primary-hover: #cc99ff;  /* Lighter Lavender */
+            --bg-color: #0a0a0c;       /* Deep Obsidian Black */
+            --card-bg: rgba(20, 16, 28, 0.75); /* Dark Midnight Purple Tint */
+            --text: #f0ecf5;           /* Soft Off-White */
+            --text-muted: #aaa2b5;     /* Muted Lavender Grey */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 20%, #25123e 0%, #0a0a0c 70%);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* AMETHYST & MAGENTA BALLOON SYSTEM */
+        .balloon-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none; z-index: 1;
+        }
+        .balloon {
+            position: absolute; bottom: -150px; width: 50px; height: 65px;
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            animation: floatUpward 10s linear infinite;
+            box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), 0 4px 15px rgba(179, 102, 255, 0.2);
+        }
+        .balloon::after {
+            content: "▲"; color: inherit; font-size: 8px;
+            position: absolute; bottom: -6px; left: 21px;
+        }
+
+        /* MAIN APP WRAPPER */
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;
+            position: relative; z-index: 10;
+        }
+
+        section {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(179, 102, 255, 0.15);
+        }
+
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(179, 102, 255, 0.4);
+        }
+
+        /* 1. HERO CONTAINER */
+        .hero { text-align: center; padding: 3rem 1rem; }
+        .profile-pic {
+            width: 160px; height: 160px; border-radius: 50%;
+            object-fit: cover; border: 4px solid var(--primary);
+            box-shadow: 0 0 25px rgba(179, 102, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+        .hero h1 {
+            color: var(--text); font-size: 3rem; margin: 1rem 0 0.5rem;
+            text-shadow: 0 0 15px rgba(179, 102, 255, 0.6);
+        }
+        .hero p { color: var(--text-muted); font-size: 1.1rem; }
+        
+        .countdown {
+            display: flex; justify-content: center; gap: 15px; margin-top: 2rem;
+        }
+        .time-box {
+            background: rgba(179, 102, 255, 0.15); 
+            color: var(--text); padding: 0.75rem 1.2rem;
+            border-radius: 10px; min-width: 75px;
+            border: 1px solid rgba(179, 102, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .time-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+        .time-box label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+
+        /* CELEBRATION BANNER (Revealed after countdown finishes) */
+        .celebration-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(58, 20, 102, 0.9) 0%, rgba(20, 16, 28, 0.95) 100%);
+            border: 2px dashed var(--primary);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 0 30px rgba(179, 102, 255, 0.3);
+            animation: slideDown 0.6s ease-out forwards;
+        }
+        .celebration-banner h3 {
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px var(--primary);
+        }
+        .celebration-banner p {
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        /* INTERACTIVE AUDIO PLAYER CONTROL */
+        .music-wrapper {
+            margin-top: 2.5rem; text-align: center;
+        }
+        .music-btn {
+            background: transparent; border: 2px solid var(--primary); color: var(--primary); 
+            padding: 0.6rem 1.5rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: 0.3s;
+        }
+
+        /* MULTIMEDIA TAB CONTROLS */
+        .tab-container {
+            display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.05); border: 2px solid var(--primary); color: var(--primary);
+            padding: 0.6rem 1.5rem; font-size: 1rem; font-weight: bold;
+            border-radius: 30px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 0 10px rgba(179, 102, 255, 0.1);
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary); color: #0a0a0c;
+            box-shadow: 0 0 15px rgba(179, 102, 255, 0.4);
+        }
+        .media-panel { display: none; }
+        .media-panel.active { display: block; }
+
+        /* 2. MASONRY PHOTO MEMORIES (UPDATED TO 4 COLUMNS) */
+        .photo-grid { column-count: 4; column-gap: 15px; }
+        @media (max-width: 900px) { .photo-grid { column-count: 3; } }
+        @media (max-width: 600px) { .photo-grid { column-count: 2; } }
+        
+        .gallery-item {
+            background: #14101c; margin-bottom: 15px; break-inside: avoid;
+            border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border 0.3s; border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+        }
+        .gallery-item:hover { transform: scale(1.03); border-color: var(--primary); }
+        .gallery-item img { width: 100%; display: block; height: auto; }
+
+        /* 3. THE VIDEO VAULT */
+        .video-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;
+        }
+        .video-item {
+            background: #000; border-radius: 12px; overflow: hidden;
+            aspect-ratio: 9/16; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05); transition: border 0.3s;
+        }
+        .video-item:hover { border-color: var(--primary); }
+        .video-item video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 4. INSIDE JOKES & QUOTES */
+        .jokes-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+        }
+        .joke-card {
+            background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 15px;
+            border-left: 5px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .joke-card p { font-style: italic; color: var(--text); font-size: 1.05rem; }
+        .joke-card span { display: block; text-align: right; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem; }
+
+        /* 5. CUTE BUBBLE & RIBBON GUESTBOOK */
+        .guestbook-display {
+            max-width: 900px; margin: 0 auto;
+        }
+        .ribbon-header {
+            position: relative; background: #3a1466; text-align: center;
+            padding: 0.5rem 2rem; margin: 0 auto 3rem; width: fit-content;
+            border: 2px dashed var(--primary); border-radius: 4px;
+            box-shadow: 0 0 15px rgba(179, 102, 255, 0.3);
+        }
+        .ribbon-header h2 { margin-bottom: 0; font-size: 1.8rem; color: #fff; }
+        
+        /* Message Bubbles Container */
+        .bubbles-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px;
+        }
+        .cute-bubble {
+            background: rgba(35, 25, 50, 0.6); border: 2px solid rgba(179, 102, 255, 0.25);
+            border-radius: 20px; padding: 1.5rem; position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); transition: all 0.3s ease;
+        }
+        .cute-bubble:hover {
+            transform: translateY(-5px); border-color: var(--primary);
+            box-shadow: 0 12px 25px rgba(179, 102, 255, 0.2);
+        }
+        /* Small downward pointer triangle for the bubble look */
+        .cute-bubble::after {
+            content: ''; position: absolute; bottom: -12px; left: 30px;
+            border-width: 12px 12px 0 0; border-style: solid;
+            border-color: rgba(35, 25, 50, 0.9) transparent; display: block; width: 0;
+        }
+        .bubble-meta {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(179, 102, 255, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        .bubble-name { font-weight: bold; color: var(--primary); font-size: 1.1rem; }
+        .bubble-ribbon-tag {
+            background: linear-gradient(90deg, #ff33aa, #8833ff); color: white;
+            font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 1px; font-weight: bold;
+        }
+        .cute-bubble p { font-size: 0.95rem; color: var(--text); font-style: italic; }
+
+        /* TIMELINE CONTROLS */
+        @keyframes floatUpward {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-120vh) rotate(25deg); opacity: 0; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(179, 102, 255, 0.4); }
+            50% { transform: scale(1.04); box-shadow: 0 0 35px rgba(179, 102, 255, 0.6); }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="balloon-container" id="balloonContainer"></div>
+
+    <div class="container">
+        
+        <section class="hero">
+            <img src="friend.jpg" alt="TWENTY FINE" class="profile-pic">
+            <h1 id="greeting">The Countdown is On!</h1>
+            <p id="subGreeting">An amazing friend, a certified elite human, and someone who still has zero idea how to act their age.</p>
+            
+            <div class="countdown">
+                <div class="time-box"><span id="days">00</span><label>Days</label></div>
+                <div class="time-box"><span id="hours">00</span><label>Hours</label></div>
+                <div class="time-box"><span id="minutes">00</span><label>Mins</label></div>
+                <div class="time-box"><span id="seconds">00</span><label>Secs</label></div>
+            </div>
+
+            <!-- DYNAMIC BIRTHDAY BANNER -->
+            <div class="celebration-banner" id="celebrationBanner">
+                <h3>🎂 Happy Birthday, Nyamz! 🎂</h3>
+                <p>May this year bring infinite happiness, flawless deployments, and zero merge conflicts! Cheers to another spectacular lap around the sun! 🎉🎁✨</p>
+            </div>
+
+            <div class="music-wrapper">
+                <button id="musicBtn" class="music-btn">
+                    🎵 Play Birthday Soundtrack
+                </button>
+                <audio id="bgMusic" loop>
+                    <source src="birthday-music.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </section>
+
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchTab('photos')">📸 Photo Memories</button>
+            <button class="tab-btn" onclick="switchTab('videos')">🎬 The Video Vault</button>
+        </div>
+
+        <section id="photosPanel" class="media-panel active">
+            <h2>Memory Lane</h2>
+            <div class="photo-grid" id="photoGrid"></div>
+        </section>
+
+        <section id="videosPanel" class="media-panel">
+            <h2>The Video Archive</h2>
+            <div class="video-grid" id="videoGrid"></div>
+        </section>
+
+        <section>
+            <h2>Inside Jokes & Quotes</h2>
+            <div class="jokes-grid">
+                <div class="joke-card">
+                    <p>"Remember when we got completely lost looking for that specific coffee shop and found an entire underground festival?"</p>
+                    <span>— Roadtrip 2025</span>
+                </div>
+                <div class="joke-card">
+                    <p>"No, I'm pretty sure code runs faster if you stare directly at the terminal without blinking."</p>
+                    <span>— Late Night Study Sessions</span>
+                </div>
+                <div class="joke-card">
+                    <p>"If lost, return to nearest taco truck immediately."</p>
+                    <span>— Every Weekend Ever</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="guestbook-display">
+            <div class="ribbon-header">
+                <h2>Wishes From Your Favorites 🎀</h2>
+            </div>
+            
+            <div class="bubbles-container">
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Melissa.</span>
+                        <span class="bubble-ribbon-tag">Dwanzi🌟</span>
+                    </div>
+                    <p>"Happy Birthday Nyamz!! I am so incredibly lucky to have you in my life. Never change (except maybe your terrible taste in horror men)!"</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Guyo.</span>
+                        <span class="bubble-ribbon-tag">Unco🤝</span>
+                    </div>
+                    <p>"Happy Birthday, Purity! 🎉 Wishing you a day filled with happiness, laughter, and all the things you love. May this new year of your life bring you success, good health, and countless beautiful memories. Enjoy your day to the fullest! 🎂🎁🥳"</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Reinard</span>
+                        <span class="bubble-ribbon-tag">Mluo</span>
+                    </div>
+                    <p>"Happy Birthday Nyambura❤️"</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Chris P.</span>
+                        <span class="bubble-ribbon-tag">Dev Partner 💻</span>
+                    </div>
+                    <p>"Happy Birthday! May your day be filled with lots of laughs, zero merge conflicts, and an endless supply of high-grade coffee."</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Elena R.</span>
+                        <span class="bubble-ribbon-tag">Partner In Crime 🥂</span>
+                    </div>
+                    <p>"To the only person who will agree to 2 AM snack runs without hesitation. Hope your day is as spectacular as you are!"</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Alex G.</span>
+                        <span class="bubble-ribbon-tag">Gym Bro ⚡</span>
+                    </div>
+                    <p>"Happy birthday champ! Keep crushing your goals and leveling up. Can't wait to celebrate properly this weekend!"</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Maya T.</span>
+                        <span class="bubble-ribbon-tag">Soul Sister 🔮</span>
+                    </div>
+                    <p>"Happy solar return! May this year bring you closer to all your manifestations. So proud of everything you are becoming."</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Ryan L.</span>
+                        <span class="bubble-ribbon-tag">Old Friend ⏳</span>
+                    </div>
+                    <p>"It's wild how many years we've been celebrating this day together. Cheers to another year of great vibes and deep talks."</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Chloe & Sam</span>
+                        <span class="bubble-ribbon-tag">The Duet 🎵</span>
+                    </div>
+                    <p>"Happy Birthday to our favorite auxiliary member! Thanks for always bringing the positive energy wherever we go!"</p>
+                </div>
+
+                <div class="cute-bubble">
+                    <div class="bubble-meta">
+                        <span class="bubble-name">Uncle Tom</span>
+                        <span class="bubble-ribbon-tag">Family 🍰</span>
+                    </div>
+                    <p>"Wishing you a fantastic year ahead full of prosperity, health, and joy. Have an extra slice of cake for me!"</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- 1. COUNTDOWN MECHANICS ---
+        const birthdayDate = new Date("June 18, 2026 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = birthdayDate - now;
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+
+            if (distance < 0) {
+                clearInterval(intervalId);
+                document.getElementById("greeting").style.display = "none";
+                document.getElementById("subGreeting").style.display = "none";
+                document.querySelector(".countdown").style.display = "none";
+                
+                // Show the celebration banner instead
+                document.getElementById("celebrationBanner").style.display = "block";
+                
+                setInterval(createBalloon, 120);
+            }
+        }
+        const intervalId = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- 2. TAB COMPONENT CONTROL SWITCH ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.media-panel').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            if(tabName === 'photos') {
+                document.getElementById('photosPanel').classList.add('active');
+                window.event.target.classList.add('active');
+            } else {
+                document.getElementById('videosPanel').classList.add('active');
+                window.event.target.classList.add('active');
+            }
+        }
+
+        // --- 3. DYNAMIC ASSET COMPONENT GENERATION ---
+        const photoGrid = document.getElementById('photoGrid');
+        const videoGrid = document.getElementById('videoGrid');
+
+        for (let i = 1; i <= 20; i++) {
+            const item = document.createElement('div');
+            item.classList.add('gallery-item');
+            item.innerHTML = `<img src="images/photo${i}.jpg" alt="Memory ${i}" onerror="this.parentElement.style.display='none'">`;
+            photoGrid.appendChild(item);
+        }
+
+        for (let i = 1; i <= 30; i++) {
+            const item = document.createElement('div');
+            item.classList.add('video-item');
+            item.innerHTML = `<video src="videos/video${i}.mp4" controls preload="metadata" playsinline></video>`;
+            videoGrid.appendChild(item);
+        }
+
+        // --- 4. DEEP PURPLE / VIOLET BALLOON PARTICLE SYSTEM ---
+        const balloonColors = ['#b366ff', '#8833ff', '#3a1466', '#ff33aa', '#dd99ff'];
+        const bContainer = document.getElementById('balloonContainer');
+
+        function createBalloon() {
+            const b = document.createElement('div');
+            b.classList.add('balloon');
+            const col = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+            b.style.backgroundColor = col; b.style.color = col;
+            b.style.left = `${Math.random() * 100}%`;
+            b.style.animationDelay = `${Math.random() * 3}s`;
+            b.style.animationDuration = `${7 + Math.random() * 6}s`;
+            bContainer.appendChild(b);
+            setTimeout(() => b.remove(), 13000);
+        }
+        for(let i=0; i<12; i++) createBalloon();
+        setInterval(createBalloon, 900);
+
+        // --- 5. BACKGROUND MUSIC CONTROLLER ---
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+
+        musicBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.innerText = "⏸️ Pause Soundtrack";
+                musicBtn.style.background = "var(--primary)";
+                musicBtn.style.color = "#0a0a0c";
+            } else {
+                bgMusic.pause();
+                musicBtn.innerText = "🎵 Play Birthday Soundtrack";
+                musicBtn.style.background = "transparent";
+                musicBtn.style.color = "var(--primary)";
+            }
+        });
+    </script>
+</body>
+</html>
