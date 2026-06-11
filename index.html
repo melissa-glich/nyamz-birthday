@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Nyamz!</title>
     <style>
-        /* CSS RESET & THEME VARIABLES (PURPLE & BLACK) */
+        /* Resets default browser margins/padding and defines the dark purple color theme variables */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #b366ff;        /* Radiant Neon Amethyst */
-            --primary-hover: #cc99ff;  /* Lighter Lavender */
-            --bg-color: #0a0a0c;       /* Deep Obsidian Black */
-            --card-bg: rgba(20, 16, 28, 0.75); /* Dark Midnight Purple Tint */
-            --text: #f0ecf5;           /* Soft Off-White */
-            --text-muted: #aaa2b5;     /* Muted Lavender Grey */
+            --primary: #b366ff;        
+            --primary-hover: #cc99ff;  
+            --bg-color: #0a0a0c;       
+            --card-bg: rgba(20, 16, 28, 0.75); 
+            --text: #f0ecf5;           
+            --text-muted: #aaa2b5;     
         }
 
+        /* Sets up the global layout, background gradients, and default text styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -25,28 +26,33 @@
             line-height: 1.6;
         }
 
-        /* AMETHYST & MAGENTA BALLOON SYSTEM */
+        /* Sets up the floating balloon background layer */
         .balloon-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             overflow: hidden; pointer-events: none; z-index: 1;
         }
+        
+        /* Defines the base shapes and styles for individual floating balloons */
         .balloon {
             position: absolute; bottom: -150px; width: 50px; height: 65px;
             border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
             animation: floatUpward 10s linear infinite;
             box-shadow: inset -6px -6px 12px rgba(0,0,0,0.3), 0 4px 15px rgba(179, 102, 255, 0.2);
         }
+        
+        /* Adds the small string tie triangle at the bottom of each balloon */
         .balloon::after {
             content: "▲"; color: inherit; font-size: 8px;
             position: absolute; bottom: -6px; left: 21px;
         }
 
-        /* MAIN APP WRAPPER */
+        /* Centered content block wrapper for the application */
         .container {
             max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;
             position: relative; z-index: 10;
         }
 
+        /* Universal container cards with glassmorphism blur effects */
         section {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -57,6 +63,7 @@
             border: 1px solid rgba(179, 102, 255, 0.15);
         }
 
+        /* Section header text layout and text glowing effects */
         h2 {
             color: var(--primary);
             text-align: center;
@@ -66,8 +73,10 @@
             text-shadow: 0 0 10px rgba(179, 102, 255, 0.4);
         }
 
-        /* 1. HERO CONTAINER */
+        /* Main hero header segment layout */
         .hero { text-align: center; padding: 3rem 1rem; }
+        
+        /* Profile picture sizing, circular masking, and pulsing borders */
         .profile-pic {
             width: 160px; height: 160px; border-radius: 50%;
             object-fit: cover; border: 4px solid var(--primary);
@@ -80,9 +89,12 @@
         }
         .hero p { color: var(--text-muted); font-size: 1.1rem; }
          
+        /* Countdown layout container styling */
         .countdown {
             display: flex; justify-content: center; gap: 15px; margin-top: 2rem;
         }
+        
+        /* Individual numerical countdown box items */
         .time-box {
             background: rgba(179, 102, 255, 0.15); 
             color: var(--text); padding: 0.75rem 1.2rem;
@@ -93,7 +105,7 @@
         .time-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
         .time-box label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
 
-        /* CELEBRATION BANNER (Revealed after countdown finishes) */
+        /* Celebratory birthday banner displayed when countdown targets are hit */
         .celebration-banner {
             display: none;
             background: linear-gradient(135deg, rgba(58, 20, 102, 0.9) 0%, rgba(20, 16, 28, 0.95) 100%);
@@ -115,19 +127,23 @@
             color: var(--text);
         }
 
-        /* INTERACTIVE AUDIO PLAYER CONTROL */
+        /* Container positioning for audio control components */
         .music-wrapper {
             margin-top: 2.5rem; text-align: center;
         }
+        
+        /* Media soundtrack activation buttons */
         .music-btn {
             background: transparent; border: 2px solid var(--primary); color: var(--primary); 
             padding: 0.6rem 1.5rem; font-weight: bold; border-radius: 20px; cursor: pointer; transition: 0.3s;
         }
 
-        /* MULTIMEDIA TAB CONTROLS */
+        /* Navigation container for multimedia tabs */
         .tab-container {
             display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;
         }
+        
+        /* Individual media tab control buttons */
         .tab-btn {
             background: rgba(255,255,255,0.05); border: 2px solid var(--primary); color: var(--primary);
             padding: 0.6rem 1.5rem; font-size: 1rem; font-weight: bold;
@@ -138,14 +154,17 @@
             background: var(--primary); color: #0a0a0c;
             box-shadow: 0 0 15px rgba(179, 102, 255, 0.4);
         }
+        
+        /* Hidden panels configuration for inactive tabs */
         .media-panel { display: none; }
         .media-panel.active { display: block; }
 
-        /* 2. MASONRY PHOTO MEMORIES (UPDATED TO 4 COLUMNS) */
+        /* Dynamic 4-column masonry layouts for photo media displays */
         .photo-grid { column-count: 4; column-gap: 15px; }
         @media (max-width: 900px) { .photo-grid { column-count: 3; } }
         @media (max-width: 600px) { .photo-grid { column-count: 2; } }
          
+        /* Presentation cards wrapping individual photos */
         .gallery-item {
             background: #14101c; margin-bottom: 15px; break-inside: avoid;
             border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -155,10 +174,12 @@
         .gallery-item:hover { transform: scale(1.03); border-color: var(--primary); }
         .gallery-item img { width: 100%; display: block; height: auto; }
 
-        /* 3. THE VIDEO VAULT */
+        /* Multi-column grid layouts for automated video play vaults */
         .video-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;
         }
+        
+        /* Presentation cards enforcing uniform portrait scaling formats for videos */
         .video-item {
             background: #000; border-radius: 12px; overflow: hidden;
             aspect-ratio: 9/16; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
@@ -167,10 +188,12 @@
         .video-item:hover { border-color: var(--primary); }
         .video-item video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 4. INSIDE JOKES & QUOTES */
+        /* Responsive spacing layouts grid for inside joke cards */
         .jokes-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
         }
+        
+        /* Individual highlighted joke text containers */
         .joke-card {
             background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 15px;
             border-left: 5px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -178,10 +201,12 @@
         .joke-card p { font-style: italic; color: var(--text); font-size: 1.05rem; }
         .joke-card span { display: block; text-align: right; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem; }
 
-        /* 5. CUTE BUBBLE & RIBBON GUESTBOOK */
+        /* Main sizing alignment setups for the birthday guestbook display panels */
         .guestbook-display {
             max-width: 900px; margin: 0 auto;
         }
+        
+        /* Title headers stylized to mimic a badge accent ribbon */
         .ribbon-header {
             position: relative; background: #3a1466; text-align: center;
             padding: 0.5rem 2rem; margin: 0 auto 3rem; width: fit-content;
@@ -190,10 +215,12 @@
         }
         .ribbon-header h2 { margin-bottom: 0; font-size: 1.8rem; color: #fff; }
          
-        /* Message Bubbles Container */
+        /* Message card layout structures inside the birthday wish book */
         .bubbles-container {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px;
         }
+        
+        /* Conversational speech bubble wrappers for personal wishes */
         .cute-bubble {
             background: rgba(35, 25, 50, 0.6); border: 2px solid rgba(179, 102, 255, 0.25);
             border-radius: 20px; padding: 1.5rem; position: relative;
@@ -203,18 +230,23 @@
             transform: translateY(-5px); border-color: var(--primary);
             box-shadow: 0 12px 25px rgba(179, 102, 255, 0.2);
         }
-        /* Small downward pointer triangle for the bubble look */
+        
+        /* Shapes bottom triangle speech bubbles accent pointers */
         .cute-bubble::after {
             content: ''; position: absolute; bottom: -12px; left: 30px;
             border-width: 12px 12px 0 0; border-style: solid;
             border-color: rgba(35, 25, 50, 0.9) transparent; display: block; width: 0;
         }
+        
+        /* Layout fields separating message metadata text items */
         .bubble-meta {
             display: flex; align-items: center; justify-content: space-between;
             margin-bottom: 0.75rem; border-bottom: 1px dashed rgba(179, 102, 255, 0.2);
             padding-bottom: 0.5rem;
         }
         .bubble-name { font-weight: bold; color: var(--primary); font-size: 1.1rem; }
+        
+        /* Colored label badges marking user friendship ranks or tags */
         .bubble-ribbon-tag {
             background: linear-gradient(90deg, #ff33aa, #8833ff); color: white;
             font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 10px;
@@ -222,17 +254,21 @@
         }
         .cute-bubble p { font-size: 0.95rem; color: var(--text); font-style: italic; }
 
-        /* TIMELINE CONTROLS */
+        /* Animation sequences detailing rising balloon movements */
         @keyframes floatUpward {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 0.6; }
             90% { opacity: 0.6; }
             100% { transform: translateY(-120vh) rotate(25deg); opacity: 0; }
         }
+        
+        /* Animation loops controlling glowing profile asset scaling pulses */
         @keyframes pulse {
             0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(179, 102, 255, 0.4); }
             50% { transform: scale(1.04); box-shadow: 0 0 35px rgba(179, 102, 255, 0.6); }
         }
+        
+        /* Animation transitions sliding down birthday banners when targets clear */
         @keyframes slideDown {
             from { transform: translateY(-20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -257,7 +293,6 @@
                 <div class="time-box"><span id="seconds">00</span><label>Secs</label></div>
             </div>
 
-            <!-- DYNAMIC BIRTHDAY BANNER -->
             <div class="celebration-banner" id="celebrationBanner">
                 <h3>🎂 Happy Twenty Fine, Nyamz! 🎂</h3>
                 <p>May this year bring infinite happiness, flawless deployments, and zero merge conflicts! Cheers to another spectacular lap around the sun! 🎉🎁✨</p>
@@ -275,8 +310,8 @@
         </section>
 
         <div class="tab-container">
-            <button class="tab-btn active" onclick="switchTab('photos')">📸 Photo Memories</button>
-            <button class="tab-btn" onclick="switchTab('videos')">🎬 The Video Vault</button>
+            <button class="tab-btn active" onclick="switchTab('photos', this)">📸 Photo Memories</button>
+            <button class="tab-btn" onclick="switchTab('videos', this)">🎬 The Video Vault</button>
         </div>
 
         <section id="photosPanel" class="media-panel active">
@@ -301,7 +336,7 @@
                     <span>— Drunk Side Quests </span>
                 </div>
                 <div class="joke-card">
-                    <p>"If lost, return to nearest Liquour Store immediately."</p>
+                    <p>"If lost, return to nearest Liquour Store immediately.zimejwithe"</p>
                     <span>— Every Weekend Ever</span>
                 </div>
             </div>
@@ -326,7 +361,7 @@
                         <span class="bubble-name">Guyo.</span>
                         <span class="bubble-ribbon-tag">Unco🤝</span>
                     </div>
-                    <p>"Happy birthday Nyambu. Enjoy your  day to the fullest! 🎂🎁🥳"</p>
+                    <p>"Happy birthday Nyambu. Enjoy your day to the fullest! 🎂🎁🥳"</p>
                 </div>
 
                 <div class="cute-bubble">
@@ -342,13 +377,7 @@
                         <span class="bubble-name">Bancy.</span>
                         <span class="bubble-ribbon-tag">In-Law 😘</span>
                     </div>
-                    <p>"Happy Birthday, Nyamburaa ❤️
-
-Thank you for always being by my side and for being such a constant source of love, support, and friendship. We’ve come a long way, and I pray that the years ahead turn our friendship into a lifetime of beautiful memories.
-
-May this new year bring you happiness, success, good health, and endless blessings. You deserve nothing but the best.
-
-I love you, Princess. ❤️ More life, more laughter, and more blessings to you. Happy Birthday! ✨🥂"</p>
+                    <p>"Happy Birthday, Nyamburaa ❤️ Thank you for always being by my side and for being such a constant source of love, support, and friendship. We’ve come a long way, and I pray that the years ahead turn our friendship into a lifetime of beautiful memories. May this new year bring you happiness, success, good health, and endless blessings. You deserve nothing but the best. I love you, Princess. ❤️ More life, more laughter, and more blessings to you. Happy Birthday! ✨🥂"</p>
                 </div>
 
                 <div class="cute-bubble">
@@ -356,9 +385,7 @@ I love you, Princess. ❤️ More life, more laughter, and more blessings to you
                         <span class="bubble-name">Pretorius.</span>
                         <span class="bubble-ribbon-tag">OJ 🥳</span>
                     </div>
-                    <p>"to nyambu, 
-it's weird how we met,
-I pray that our friendship grows so that I can see you win happy birthday to you"</p>
+                    <p>"to nyambu, it's weird how we met, I pray that our friendship grows so that I can see you win happy birthday to you"</p>
                 </div>
 
                 <div class="cute-bubble">
@@ -382,19 +409,7 @@ I pray that our friendship grows so that I can see you win happy birthday to you
                         <span class="bubble-name">Jemmy</span>
                         <span class="bubble-ribbon-tag">Old Friend ⏳</span>
                     </div>
-                    <p>"Happy Birthday to my dearest friend! ❤️
-
-It's amazing to think that our friendship started so unexpectedly, yet it has grown into one of the most meaningful relationships in my life. Through the years, we've shared countless memories, faced challenges, overcome obstacles, and stood by each other when life wasn't easy.
-
-Thank you for being my pillar of strength and for allowing me to be yours. I cherish the comfort we've built together—the kind where we can talk about anything, be completely ourselves, and know we're always understood. We've had our disagreements and tough moments, but what makes our friendship special is that we've always found our way back to each other, stronger than before.
-
-I am incredibly grateful that you've welcomed me into your family and made me feel like I truly belong. Thank you for trusting me with your life, your stories, your laughter, and even your tears. Having you as my best friend is a blessing I never saw coming but one I will forever treasure.
-
-On your special day, I wish you endless happiness, good health, success, peace, and all the love your heart can hold. May this new year of your life bring you beautiful opportunities and unforgettable moments. You deserve every wonderful thing that comes your way.
-
-Thank you for being you, for being my friend, and for being family.
-
-Happy Birthday! I love you always. 🎉🎂❤️"</p>
+                    <p>"Happy Birthday to my dearest friend! ❤️ It's amazing to think that our friendship started so unexpectedly, yet it has grown into one of the most meaningful relationships in my life. Through the years, we've shared countless memories, faced challenges, overcome obstacles, and stood by each other when life wasn't easy. Thank you for being my pillar of strength and for allowing me to be yours. I cherish the comfort we've built together—the kind where we can talk about anything, be completely ourselves, and know we're always understood. We've had our disagreements and tough moments, but what makes our friendship special is that we've always found our way back to each other, stronger than before. I am incredibly grateful that you've welcomed me into your family and made me feel like I truly belong. Thank you for trusting me with your life, your stories, your laughter, and even your tears. Having you as my best friend is a blessing I never saw coming but one I will forever treasure. On your special day, I wish you endless happiness, good health, success, peace, and all the love your heart can hold. May this new year of your life bring you beautiful opportunities and unforgettable moments. You deserve every wonderful thing that comes your way. Thank you for being you, for being my friend, and for being family. Happy Birthday! I love you always. 🎉🎂❤️"</p>
                 </div>
 
                 <div class="cute-bubble">
@@ -402,15 +417,15 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
                         <span class="bubble-name">Ted</span>
                         <span class="bubble-ribbon-tag">Besto 🎵</span>
                     </div>
-                    <p>"Happy Birthday to our favorite! Thanks for always bringing the positive energy wherever we go!"</p>
+                    <p>"Happy Birthday to a truly special friend! Thank you for always bringing the best energy, the best laughs, and years of amazing memories. Hope your day is filled with everything you love! 🎂🎈❤️"</p>
                 </div>
 
                 <div class="cute-bubble">
                     <div class="bubble-meta">
                         <span class="bubble-name">Musembi</span>
-                        <span class="bubble-ribbon-tag">Family 🍰</span>
+                        <span class="bubble-ribbon-tag">Chiwawa 🍰</span>
                     </div>
-                    <p>"Wishing you a fantastic year ahead full of prosperity, health, and joy. Have an extra slice of cake for me!"</p>
+                    <p>"Happy Birthday to my partner-in-crime! Cheers to another spectacular lap around the sun and to a friendship that only gets better with time. Have the absolute best day—you deserve it all! 🎉🎁🎈"</p>
                 </div>
             </div>
         </section>
@@ -419,6 +434,7 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
 
     <script>
         // --- 1. COUNTDOWN MECHANICS ---
+        // Sets up targets and updates countdown intervals every second until the time matches
         const birthdayDate = new Date("June 18, 2026 00:00:00").getTime();
 
         function updateCountdown() {
@@ -434,13 +450,13 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
             document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
             document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
 
+            // Swaps countdown timer visibility with celebratory birthday display boards when time metrics hit 0
             if (distance < 0) {
                 clearInterval(intervalId);
                 document.getElementById("greeting").style.display = "none";
                 document.getElementById("subGreeting").style.display = "none";
                 document.querySelector(".countdown").style.display = "none";
                 
-                // Show the celebration banner instead
                 document.getElementById("celebrationBanner").style.display = "block";
                 
                 setInterval(createBalloon, 120);
@@ -450,24 +466,24 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
         updateCountdown();
 
         // --- 2. TAB COMPONENT CONTROL SWITCH ---
-        function switchTab(tabName) {
+        // Directs display panel filters and updates visual accent focus states on selection tabs
+        function switchTab(tabName, clickedButton) {
             document.querySelectorAll('.media-panel').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
+            clickedButton.classList.add('active');
             if(tabName === 'photos') {
                 document.getElementById('photosPanel').classList.add('active');
-                window.event.target.classList.add('active');
             } else {
                 document.getElementById('videosPanel').classList.add('active');
-                window.event.target.classList.add('active');
             }
         }
 
         // --- 3. DYNAMIC ASSET COMPONENT GENERATION ---
+        // Dynamically creates photo grid elements and sets image error fallbacks
         const photoGrid = document.getElementById('photoGrid');
         const videoGrid = document.getElementById('videoGrid');
 
-        // NOTE: Adjust casing here ("Photo" vs "photo" and ".jpg" vs ".JPG") to exactly match your physical files
         for (let i = 1; i <= 40; i++) {
             const item = document.createElement('div');
             item.classList.add('gallery-item');
@@ -475,7 +491,8 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
             photoGrid.appendChild(item);
         }
 
-        for (let i = 1; i <= 20; i++) {
+        // Dynamically creates video panel items configured to play muted on loop cycles
+        for (let i = 1; i <= 23; i++) {
             const item = document.createElement('div');
             item.classList.add('video-item');
             item.innerHTML = `<video src="videos/Video${i}.mp4" controls preload="metadata" playsinline muted autoplay loop></video>`;
@@ -483,6 +500,7 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
         }
 
         // --- 4. DEEP PURPLE / VIOLET BALLOON PARTICLE SYSTEM ---
+        // Programmatically constructs and animatedly triggers floating purple background particles
         const balloonColors = ['#b366ff', '#8833ff', '#3a1466', '#ff33aa', '#dd99ff'];
         const bContainer = document.getElementById('balloonContainer');
 
@@ -501,6 +519,7 @@ Happy Birthday! I love you always. 🎉🎂❤️"</p>
         setInterval(createBalloon, 900);
 
         // --- 5. BACKGROUND MUSIC CONTROLLER ---
+        // Intercepts button triggers to switch audio streaming states and update button display flags
         const musicBtn = document.getElementById('musicBtn');
         const bgMusic = document.getElementById('bgMusic');
 
