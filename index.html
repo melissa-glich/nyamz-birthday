@@ -435,7 +435,7 @@
     <script>
         // --- 1. COUNTDOWN MECHANICS ---
         // Sets up targets and updates countdown intervals every second until the time matches
-        const birthdayDate = new Date("June 18, 2026 00:00:00").getTime();
+        const birthdayDate = new Date("June 17, 2026 00:00:00").getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
@@ -484,7 +484,7 @@
         const photoGrid = document.getElementById('photoGrid');
         const videoGrid = document.getElementById('videoGrid');
 
-        for (let i = 1; i <= 43; i++) {
+        for (let i = 1; i <= 42; i++) {
             const item = document.createElement('div');
             item.classList.add('gallery-item');
             item.innerHTML = `<img src="images/Photo${i}.jpg" alt="Memory ${i}" onerror="this.parentElement.style.display='none'">`;
