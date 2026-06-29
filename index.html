@@ -105,11 +105,11 @@
         .time-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
         .time-box label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
 
-        /* Celebratory birthday banner displayed when countdown targets are hit - BORDER REMOVED */
+        /* Celebratory birthday banner displayed when countdown targets are hit */
         .celebration-banner {
             display: none;
             background: linear-gradient(135deg, rgba(58, 20, 102, 0.9) 0%, rgba(20, 16, 28, 0.95) 100%);
-            border: none;
+            border: 2px dashed var(--primary);
             border-radius: 15px;
             padding: 2rem;
             margin-top: 2rem;
@@ -159,25 +159,20 @@
         .media-panel { display: none; }
         .media-panel.active { display: block; }
 
-        /* Grid layout for completely even and uniform photo columns */
-        .photo-grid { 
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
+        /* Dynamic 4-column masonry layouts for photo media displays */
+        .photo-grid { column-count: 4; column-gap: 15px; }
+        @media (max-width: 900px) { .photo-grid { column-count: 3; } }
+        @media (max-width: 600px) { .photo-grid { column-count: 2; } }
          
         /* Presentation cards wrapping individual photos */
         .gallery-item {
-            background: #14101c;
+            background: #14101c; margin-bottom: 15px; break-inside: avoid;
             border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, border 0.3s; border: 1px solid rgba(255,255,255,0.05);
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .gallery-item:hover { transform: scale(1.03); border-color: var(--primary); }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .gallery-item img { width: 100%; display: block; height: auto; }
 
         /* Multi-column grid layouts for automated video play vaults */
         .video-grid {
@@ -497,7 +492,10 @@
             photoGrid.appendChild(item);
         }
 
-        // Controls removed dynamically here for clean, looping video blocks on mobile screens
+        /* FIXED FOR MOBILE LOOK: 
+           - Removed the 'controls' attribute from string template literal
+           - Relies on style rule 'pointer-events: none;' to kill accidental player triggers on touch surfaces
+        */
         for (let i = 1; i <= 23; i++) {
             const item = document.createElement('div');
             item.classList.add('video-item');
