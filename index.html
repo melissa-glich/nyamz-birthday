@@ -105,11 +105,11 @@
         .time-box span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
         .time-box label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
 
-        /* Celebratory birthday banner displayed when countdown targets are hit */
+        /* Celebratory birthday banner displayed when countdown targets are hit - BORDER REMOVED */
         .celebration-banner {
             display: none;
             background: linear-gradient(135deg, rgba(58, 20, 102, 0.9) 0%, rgba(20, 16, 28, 0.95) 100%);
-            border: 2px dashed var(--primary);
+            border: none;
             border-radius: 15px;
             padding: 2rem;
             margin-top: 2rem;
@@ -159,20 +159,25 @@
         .media-panel { display: none; }
         .media-panel.active { display: block; }
 
-        /* Dynamic 4-column masonry layouts for photo media displays */
-        .photo-grid { column-count: 4; column-gap: 15px; }
-        @media (max-width: 900px) { .photo-grid { column-count: 3; } }
-        @media (max-width: 600px) { .photo-grid { column-count: 2; } }
+        /* Grid layout for completely even and uniform photo columns */
+        .photo-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
          
         /* Presentation cards wrapping individual photos */
         .gallery-item {
-            background: #14101c; margin-bottom: 15px; break-inside: avoid;
+            background: #14101c;
             border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, border 0.3s; border: 1px solid rgba(255,255,255,0.05);
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .gallery-item:hover { transform: scale(1.03); border-color: var(--primary); }
-        .gallery-item img { width: 100%; display: block; height: auto; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         /* Multi-column grid layouts for automated video play vaults */
         .video-grid {
@@ -186,7 +191,12 @@
             border: 1px solid rgba(255,255,255,0.05); transition: border 0.3s;
         }
         .video-item:hover { border-color: var(--primary); }
-        .video-item video { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Strips out target tap events entirely so native mobile UI video players cannot trigger */
+        .video-item video { 
+            width: 100%; height: 100%; object-fit: cover; 
+            pointer-events: none; 
+        }
 
         /* Responsive spacing layouts grid for inside joke cards */
         .jokes-grid {
@@ -434,7 +444,6 @@
 
     <script>
         // --- 1. COUNTDOWN MECHANICS ---
-        // Sets up targets and updates countdown intervals every second until the time matches
         const birthdayDate = new Date("June 17, 2026 00:00:00").getTime();
 
         function updateCountdown() {
@@ -450,7 +459,6 @@
             document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
             document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
 
-            // Swaps countdown timer visibility with celebratory birthday display boards when time metrics hit 0
             if (distance < 0) {
                 clearInterval(intervalId);
                 document.getElementById("greeting").style.display = "none";
@@ -466,7 +474,6 @@
         updateCountdown();
 
         // --- 2. TAB COMPONENT CONTROL SWITCH ---
-        // Directs display panel filters and updates visual accent focus states on selection tabs
         function switchTab(tabName, clickedButton) {
             document.querySelectorAll('.media-panel').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -480,7 +487,6 @@
         }
 
         // --- 3. DYNAMIC ASSET COMPONENT GENERATION ---
-        // Dynamically creates photo grid elements and sets image error fallbacks
         const photoGrid = document.getElementById('photoGrid');
         const videoGrid = document.getElementById('videoGrid');
 
@@ -491,16 +497,15 @@
             photoGrid.appendChild(item);
         }
 
-        // Dynamically creates video panel items configured to play muted on loop cycles
+        // Controls removed dynamically here for clean, looping video blocks on mobile screens
         for (let i = 1; i <= 23; i++) {
             const item = document.createElement('div');
             item.classList.add('video-item');
-            item.innerHTML = `<video src="videos/Video${i}.mp4" controls preload="metadata" playsinline muted autoplay loop></video>`;
+            item.innerHTML = `<video src="videos/Video${i}.mp4" preload="metadata" playsinline muted autoplay loop></video>`;
             videoGrid.appendChild(item);
         }
 
         // --- 4. DEEP PURPLE / VIOLET BALLOON PARTICLE SYSTEM ---
-        // Programmatically constructs and animatedly triggers floating purple background particles
         const balloonColors = ['#b366ff', '#8833ff', '#3a1466', '#ff33aa', '#dd99ff'];
         const bContainer = document.getElementById('balloonContainer');
 
@@ -519,7 +524,6 @@
         setInterval(createBalloon, 900);
 
         // --- 5. BACKGROUND MUSIC CONTROLLER ---
-        // Intercepts button triggers to switch audio streaming states and update button display flags
         const musicBtn = document.getElementById('musicBtn');
         const bgMusic = document.getElementById('bgMusic');
 
